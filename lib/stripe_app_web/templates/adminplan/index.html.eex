@@ -1,0 +1,33 @@
+<h2>Listing Plans</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Stripe</th>
+      <th>Price</th>
+      <th>Interval</th>
+      <th>Visible?</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for plan <- @plans do %>
+    <tr>
+      <td><%= plan.name %></td>
+      <td><%= plan.stripe_id %></td>
+      <td><%= plan.price %></td>
+      <td><%= plan.interval %></td>
+      <td><%= plan.visible %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: adminplan_path(@conn, :show, plan), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: adminplan_path(@conn, :edit, plan), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: adminplan_path(@conn, :delete, plan), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+

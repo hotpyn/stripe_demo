@@ -1,0 +1,22 @@
+<article>
+	<% if flash[:error].present? %>
+	<div id="error_explanation">
+		<p><%= flash[:error] %></p>
+	</div>
+	<% end %>
+</article>
+
+<p>
+Please confirm that you want to cancel plan.
+<p>
+
+<%= form_tag "/plan_purchases/cancel_act" do %>
+<%= hidden_field_tag(:plan_id, @plan.id) %>
+<%= label_tag(:password, "Password:") %>
+<%= password_field_tag(:password) %>
+<%= submit_tag("Cancel plan") %>
+<% end %>
+
+
+Or go back to the <A href=/plans>plan listing</A>.
+

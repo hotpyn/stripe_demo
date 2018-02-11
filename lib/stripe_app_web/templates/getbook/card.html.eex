@@ -1,0 +1,5 @@
+<p>Use a new card:<p>
+
+<%= render "form.html", Map.put(assigns, :action, getbook_path(@conn, :new_card)) %>
+
+<span><%= link "Back", to: book_path(@conn, :index) %></span>

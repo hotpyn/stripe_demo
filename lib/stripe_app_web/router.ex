@@ -51,18 +51,25 @@ defmodule StripeAppWeb.Router do
 
     resources "/books", BookController
     resources "/plans", PlanController
-    resources "/getbooks", GetbookController
-    resources "/getplans", GetplanController
+    resources "/adminbooks", AdminbookController
+    resources "/adminplans", AdminplanController
 
     resources "/posts", PostController
     resources "/users", UserController
     put "/lock/:id", UserController, :lock
     put "/unlock/:id", UserController, :unlock
     put "/confirm/:id", UserController, :confirm
+
+    post "/getbooks/new_card", GetbookController, :new_card
+    post "/getbooks/existing_card", GetbookController, :existing_card
+    get "/getbooks/:id/card", GetbookController, :card
+
+    get "/pages/:id/show", PageController, :show
+
+    get "/getplans/:id/card", GetplanController, :card
+    post "/getplans/new_card", GetplanController, :new_card
+    post "/getplans/existing_card", GetplanController, :existing_card
+
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", StripeAppWeb do
-  #   pipe_through :api
-  # end
 end

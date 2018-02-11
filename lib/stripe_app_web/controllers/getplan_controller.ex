@@ -1,60 +1,83 @@
 defmodule StripeAppWeb.GetplanController do
+
   use StripeAppWeb, :controller
 
   alias StripeApp.Products
   alias StripeApp.Products.Getplan
 
-  def index(conn, _params) do
-    getplans = Products.list_getplans()
-    render(conn, "index.html", getplans: getplans)
-  end
+  ######################################################################
+  #
+  # subscribe to new plan
+  #
+  # Server-monthly                  Server-monthly                  N
+  # Server-yearly                   Server-monthly                  D
+  # Book-monthly                    Server-monthly                  U
+  # Book-yearly                     Server-monthly                  D
+  # Server-monthly                  Server-yearly                   U
+  # Server-yearly                   Server-yearly                   N
+  # Book-monthly                    Server-yearly                   U
+  # Book-yearly                     Server-yearly                   U
+  # Server-monthly                  Book-monthly                    D
+  # Server-yearly                   Book-monthly                    D
+  # Book-monthly                    Book-monthly                    N
+  # Book-yearly                     Book-monthly                    D
+  # Server-monthly                  Book-yearly                     U
+  # Server-yearly                   Book-yearly                     D
+  # Book-monthly                    Book-yearly                     U
+  # Book-yearly                     Book-yearly                     N
+  #
+  ######################################################################
 
-  def new(conn, _params) do
+  ######################################################################
+  #
+  #	Order new plan, upgrade plan, downgrade plan.
+  #	This function will create forms for user to take action.
+  #
+  ######################################################################
+
+  def card(conn, %{"id" => id}) do
+    plan = Products.get_plan!(id)
     changeset = Products.change_getplan(%Getplan{})
-    render(conn, "new.html", changeset: changeset)
+    u=%{:email => conn.assigns.current_user.email }
+    render(conn, "card.html", plan: plan, u: u, changeset: changeset)
   end
 
-  def create(conn, %{"getplan" => getplan_params}) do
-    case Products.create_getplan(getplan_params) do
-      {:ok, getplan} ->
-        conn
-        |> put_flash(:info, "Getplan created successfully.")
-        |> redirect(to: getplan_path(conn, :show, getplan))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
+
+  ######################################################################
+  #
+  #	Subscribe plan, when the user does not have existing
+  #	stripe_id or does not want to use existing card
+  #
+  ######################################################################
+
+  def new_card(conn, %{"plan_id" => id, "amount" => amount, "stripeToken" => token} ) do
+    {:ok, %{"id" => stripe_cus_id}} = Stripe.Customer.create(source: token, email: conn.assigns.current_user.email)
+    {:ok, charge} = Stripe.Subscription.create(customer: stripe_cus_id, amount: amount, description: "plan", currency: "usd")
+    redirect conn, to: user_path(conn, :index)
   end
 
-  def show(conn, %{"id" => id}) do
-    getplan = Products.get_getplan!(id)
-    render(conn, "show.html", getplan: getplan)
+
+  ######################################################################
+  #
+  # Subscription, if the user wants to use existing card/stripe_id
+  #
+  ######################################################################
+
+  def existing_card do
   end
 
-  def edit(conn, %{"id" => id}) do
-    getplan = Products.get_getplan!(id)
-    changeset = Products.change_getplan(getplan)
-    render(conn, "edit.html", getplan: getplan, changeset: changeset)
+
+  ######################################################################
+  #
+  #	Cancel plans
+  #
+  ######################################################################
+
+  def cancel do
   end
 
-  def update(conn, %{"id" => id, "getplan" => getplan_params}) do
-    getplan = Products.get_getplan!(id)
 
-    case Products.update_getplan(getplan, getplan_params) do
-      {:ok, getplan} ->
-        conn
-        |> put_flash(:info, "Getplan updated successfully.")
-        |> redirect(to: getplan_path(conn, :show, getplan))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", getplan: getplan, changeset: changeset)
-    end
+  def cancel_act do
   end
 
-  def delete(conn, %{"id" => id}) do
-    getplan = Products.get_getplan!(id)
-    {:ok, _getplan} = Products.delete_getplan(getplan)
-
-    conn
-    |> put_flash(:info, "Getplan deleted successfully.")
-    |> redirect(to: getplan_path(conn, :index))
-  end
 end

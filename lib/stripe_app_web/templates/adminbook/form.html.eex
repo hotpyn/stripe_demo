@@ -37,7 +37,7 @@
 
   <div class="form-group">
     <%= label f, :visible, class: "control-label" %>
-    <%= text_input f, :visible, class: "form-control" %>
+    <%= checkbox f, :visible, class: "checkbox" %>
     <%= error_tag f, :visible %>
   </div>
 

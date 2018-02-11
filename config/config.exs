@@ -23,6 +23,9 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Stripe
+config :stripe, :secret_key, System.get_env("STRIPE_SECRET_KEY")
+
 # %% Coherence Configuration %%   Don't remove this line
 config :coherence,
   user_schema: StripeApp.Coherence.User,

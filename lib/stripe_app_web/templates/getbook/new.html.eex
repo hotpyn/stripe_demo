@@ -1,5 +1,0 @@
-<h2>New Getbook</h2>
-
-<%= render "form.html", Map.put(assigns, :action, getbook_path(@conn, :create)) %>
-
-<span><%= link "Back", to: getbook_path(@conn, :index) %></span>

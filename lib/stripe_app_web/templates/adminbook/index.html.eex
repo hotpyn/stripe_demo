@@ -8,26 +8,28 @@
       <th>Image</th>
       <th>Url</th>
       <th>Price</th>
+      <th>Visible?</th>
 
       <th></th>
     </tr>
   </thead>
   <tbody>
 <%= for book <- @books do %>
-  <%= if book.visible do %>
     <tr>
       <td><%= book.title %></td>
       <td><%= book.author %></td>
       <td><%= book.image %></td>
       <td><%= book.url %></td>
       <td><%= book.price %></td>
+      <td><%= book.visible %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: book_path(@conn, :show, book), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Buy", to: getbook_path(@conn, :card, book), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Show", to: adminbook_path(@conn, :show, book), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: adminbook_path(@conn, :edit, book), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: adminbook_path(@conn, :delete, book), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+
       </td>
     </tr>
-  <% end %>
 <% end %>
   </tbody>
 </table>

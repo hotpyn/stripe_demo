@@ -12,7 +12,7 @@ defmodule StripeApp.Products.Book do
     field :price, :float
     field :title, :string
     field :url, :string
-    field :visible, :boolean
+    field :visible, :boolean, default: false
 
     timestamps()
   end

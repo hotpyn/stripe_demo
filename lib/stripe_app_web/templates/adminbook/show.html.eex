@@ -34,4 +34,4 @@
 
 </ul>
 
-<span><%= link "Back", to: book_path(@conn, :index) %></span>
+<span><%= link "Back", to: adminbook_path(@conn, :index) %></span>

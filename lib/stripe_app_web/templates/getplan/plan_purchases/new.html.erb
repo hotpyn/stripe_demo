@@ -1,0 +1,52 @@
+<article>
+	<% if flash[:error].present? %>
+	<div id="error_explanation">
+		<p><%= flash[:error] %></p>
+	</div>
+	<% end %>
+	<label class="amount">
+		<span>Amount: $<%=@plan.price %></span>
+	</label>
+</article>
+
+<% if @bought.present? %>
+<%= params[:plan_id] %>
+<%= @bought.plan_id %>
+<%= @change %>
+<% end %>
+
+Please confirm that you are purchasing the plan and agree with this
+<A href=/legal/plan-agreement.html target="_blank">agreement</A>.
+<p>
+
+<% if @card.present? %>
+<p>Use existing card:</p>
+<% @card.data.each do |data| %>
+<p>Last 4 digits - <%= data.last4 %></p>
+<%= form_tag("/plan_purchases/buy_existing_card") do %>
+<%= hidden_field_tag(:id, @plan.id) %>
+<%= hidden_field_tag(:card_id, data.id) %>
+<%= hidden_field_tag(:plan_id, @plan.id) %>
+<%= label_tag(:password, "Password:") %>
+<%= password_field_tag(:password) %>
+<%= submit_tag("Buy plan") %>
+<% end %>
+<% end %>
+<% end %>
+
+
+<p>Use a new card:<p>
+
+<%= form_tag "/plan_purchases/buy_new_card" do %>
+	<input type="hidden" name="plan_id" value="<%=@plan.id %>">
+	<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+	data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+	data-description="<%= @plan.name %>"
+	data-amount="<%= @plan.price*100 %>"
+	data-email="<%= current_user.email %>"
+	data-locale="auto"></script>
+<% end %>
+
+Or go back to the <A href=/plans>plan listing</A>.
+
+

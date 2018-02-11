@@ -10,7 +10,8 @@ defmodule StripeApp.Products.Getbook do
     field :book_id, :integer
     field :price, :float
     field :stripe_charge_id, :string
-    field :user_id, :integer
+    field :stripe_cus_id, :string
+    field :user_id, :binary_id
 
     timestamps()
   end
@@ -18,7 +19,7 @@ defmodule StripeApp.Products.Getbook do
   @doc false
   def changeset(%Getbook{} = getbook, attrs) do
     getbook
-    |> cast(attrs, [:user_id, :book_id, :stripe_charge_id, :price])
-    |> validate_required([:user_id, :book_id, :stripe_charge_id, :price])
+    |> cast(attrs, [:user_id, :book_id, :stripe_charge_id, :stripe_cus_id, :price])
+    |> validate_required([:user_id, :book_id, :stripe_charge_id, :stripe_cus_id, :price])
   end
 end

@@ -1,0 +1,21 @@
+You are reading - <h2><%=@book.title %></h2>
+
+<%= @conn.assigns.current_user.email %>
+<ul>
+  <li>
+    <strong>Author:</strong>
+    <%= @book.author %>
+  </li>
+
+  <li>
+    <strong>Image:</strong>
+    <%= @book.image %>
+  </li>
+
+  <li>
+    <strong>Url:</strong>
+    <%= @book.url %>
+  </li>
+
+</ul>
+

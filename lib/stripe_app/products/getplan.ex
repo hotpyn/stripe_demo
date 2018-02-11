@@ -10,8 +10,9 @@ defmodule StripeApp.Products.Getplan do
     field :plan_id, :integer
     field :price, :float
     field :status, :integer
+    field :stripe_cus_id, :string
     field :stripe_sub_id, :string
-    field :user_id, :integer
+    field :user_id, :binary_id
 
     timestamps()
   end
@@ -19,7 +20,7 @@ defmodule StripeApp.Products.Getplan do
   @doc false
   def changeset(%Getplan{} = getplan, attrs) do
     getplan
-    |> cast(attrs, [:user_id, :plan_id, :status, :stripe_sub_id, :price])
-    |> validate_required([:user_id, :plan_id, :status, :stripe_sub_id, :price])
+    |> cast(attrs, [:user_id, :plan_id, :status, :stripe_cus_id, :stripe_sub_id, :price])
+    |> validate_required([:user_id, :plan_id, :status, :stripe_cus_id, :stripe_sub_id, :price])
   end
 end

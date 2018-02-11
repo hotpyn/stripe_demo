@@ -21,6 +21,21 @@ Start with 'coherence_demo_confirm' and to create a project named 'StripeApp'.
 cleanup-coherence.perl coherence_demo_confirm StripeApp stripe_app
 ~~~~~~~~~~
 
+add stripe library in mix.exs -
+
+~~~~~~~~~~
+{:stripe, "~> 0.7.1", hex: :stripe_elixir}
+~~~~~~~~~~
+
+add stripe secret key in config/config.ex -
+
+~~~~~~~~~~
+# Stripe
+config :stripe, :secret_key, System.get_env("STRIPE_SECRET_KEY")
+~~~~~~~~~~
+
+
+
 ~~~~~~~~~~
 mix do deps.get; deps.compile
 cd assets && npm install
@@ -46,8 +61,8 @@ Create the following four paths using [mix phx.gen.html](https://hexdocs.pm/phoe
 ~~~~~~~~~~
 mix phx.gen.html Products Book books title:string author:string image:string url:string price:float visible:boolean
 mix phx.gen.html Products Plan plans name:string stripe_id:string price:float interval:datetime visible:boolean
-mix phx.gen.html Products Getbook getbooks user_id:integer book_id:integer stripe_charge_id:string price:float
-mix phx.gen.html Products Getplan getplans user_id:integer plan_id:integer status:integer stripe_sub_id:string price:float
+mix phx.gen.html Products Getbook getbooks user_id:binary_id book_id:integer stripe_cus_id:string stripe_charge_id:string price:float
+mix phx.gen.html Products Getplan getplans user_id:binary_id plan_id:integer status:integer stripe_cus_id:string stripe_sub_id:string price:float
 ~~~~~~~~~~
 
 
@@ -139,7 +154,9 @@ defmodule StripeApp.Repo.Migrations.CreateGetplans do
 end
 ~~~~~~~~~~
 
-seeds.ex -
+A guide on seeding data is [here](http://phoenixframework.org/blog/seeding-data).
+
+Here is our seeds.ex -
 
 ~~~~~~~~
 alias StripeApp.Repo
@@ -189,13 +206,49 @@ mix ecto.setup
 Your database will be ready.
 
 
-## Step 4. New Controllers
+## Step 4. Add AdminbookController and AdminplanController
 
-adminbook_controller
+We create two separate BookControllers and PlanControllers. The regular BookController and 
+PlanController has only index and show. AdminbookController has restricted access, whereas 
+BookController can be accessed by all users.
 
-adminplan_controller
+The current BookController is copied into AdminbookController with full access to change, 
+update and delete options.  The view and template are also duplicated. The files were
+internally changed with book_controller references to adminbook_controller.
+
+In the book and plan controllers, paths edit,new,delete are removed. Also, the 'visible'
+option is activated.
+
+Add this to router.ex -
+
+~~~~~~~~~~
+resources "/adminbooks", BookController
+resources "/adminplans", PlanController
+~~~~~~~~~~
+
+## Step 5. Add New Functionality in GetbookController and GetplanController
+
+This block receives stripe payments
+
+~~~~~~~
+    post "/getbooks/new_card", GetbookController, :new_card
+    post "/getbooks/existing_card", GetbookController, :existing_card
+    get "/getbooks/:id/card", GetbookController, :card
+
+    get "/getplans/:id/card", GetplanController, :card
+    post "/getplans/new_card", GetplanController, :new_card
+    post "/getplans/existing_card", GetplanController, :existing_card
+~~~~~~~
 
 
-## Step 5. New functionalities
+## Step 6. Control Access Based on Payment
 
+
+create template/page/show.html
+
+Also edit route.ex -
+
+~~~~~~~
+get "/pages/:id/show", PageController, :show
+~~~~~~~
 

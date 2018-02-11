@@ -1,0 +1,5 @@
+<h2>Use a new card:</h2>
+
+<%= render "form.html", Map.put(assigns, :action, getplan_path(@conn, :new_card)) %>
+
+<span><%= link "Back", to: plan_path(@conn, :index) %></span>

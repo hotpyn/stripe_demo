@@ -18,10 +18,15 @@
   </li>
 
   <li>
+    <strong>Interval:</strong>
+    <%= @plan.interval %>
+  </li>
+
+  <li>
     <strong>Visible:</strong>
     <%= @plan.visible %>
   </li>
 
 </ul>
 
-<span><%= link "Back", to: plan_path(@conn, :index) %></span>
+<span><%= link "Back", to: adminplan_path(@conn, :index) %></span>
