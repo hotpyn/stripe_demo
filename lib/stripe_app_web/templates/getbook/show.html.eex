@@ -1,0 +1,28 @@
+<h2>Show Getbook</h2>
+
+<ul>
+
+  <li>
+    <strong>User:</strong>
+    <%= @getbook.user_id %>
+  </li>
+
+  <li>
+    <strong>Book:</strong>
+    <%= @getbook.book_id %>
+  </li>
+
+  <li>
+    <strong>Stripe charge:</strong>
+    <%= @getbook.stripe_charge_id %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @getbook.price %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: getbook_path(@conn, :edit, @getbook) %></span>
+<span><%= link "Back", to: getbook_path(@conn, :index) %></span>

@@ -1,0 +1,32 @@
+<h2>Listing Getbooks</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Book</th>
+      <th>Stripe charge</th>
+      <th>Price</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for getbook <- @getbooks do %>
+    <tr>
+      <td><%= getbook.user_id %></td>
+      <td><%= getbook.book_id %></td>
+      <td><%= getbook.stripe_charge_id %></td>
+      <td><%= getbook.price %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: getbook_path(@conn, :show, getbook), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: getbook_path(@conn, :edit, getbook), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: getbook_path(@conn, :delete, getbook), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Getbook", to: getbook_path(@conn, :new) %></span>

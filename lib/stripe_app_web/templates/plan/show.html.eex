@@ -1,0 +1,33 @@
+<h2>Show Plan</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @plan.name %>
+  </li>
+
+  <li>
+    <strong>Stripe:</strong>
+    <%= @plan.stripe_id %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @plan.price %>
+  </li>
+
+  <li>
+    <strong>Interval:</strong>
+    <%= @plan.interval %>
+  </li>
+
+  <li>
+    <strong>Visible:</strong>
+    <%= @plan.visible %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: plan_path(@conn, :edit, @plan) %></span>
+<span><%= link "Back", to: plan_path(@conn, :index) %></span>

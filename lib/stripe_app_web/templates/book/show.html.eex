@@ -1,0 +1,38 @@
+<h2>Show Book</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @book.title %>
+  </li>
+
+  <li>
+    <strong>Author:</strong>
+    <%= @book.author %>
+  </li>
+
+  <li>
+    <strong>Image:</strong>
+    <%= @book.image %>
+  </li>
+
+  <li>
+    <strong>Url:</strong>
+    <%= @book.url %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @book.price %>
+  </li>
+
+  <li>
+    <strong>Visi:</strong>
+    <%= @book.visible %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: book_path(@conn, :edit, @book) %></span>
+<span><%= link "Back", to: book_path(@conn, :index) %></span>
