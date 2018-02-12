@@ -3,7 +3,7 @@
     <h3 class="panel-title"><%= gettext "Default Login Credentials" %></h3>
   </div>
   <div class="panel-body">
-    <p><%= gettext "Email" %>: <strong>demouser@example.com</strong></p>
+    <p><%= gettext "Email" %>: <strong>demouser1@example.com, demouser2@example.com</strong></p>
     <p><%= gettext "Password" %>: <strong>secret</strong></p>
   </div>
 </div>

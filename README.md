@@ -61,8 +61,8 @@ Create the following four paths using [mix phx.gen.html](https://hexdocs.pm/phoe
 ~~~~~~~~~~
 mix phx.gen.html Products Book books title:string author:string image:string url:string price:float visible:boolean
 mix phx.gen.html Products Plan plans name:string stripe_id:string price:float interval:datetime visible:boolean
-mix phx.gen.html Products Getbook getbooks user_id:binary_id book_id:integer stripe_cus_id:string stripe_charge_id:string price:float
-mix phx.gen.html Products Getplan getplans user_id:binary_id plan_id:integer status:integer stripe_cus_id:string stripe_sub_id:string price:float
+mix phx.gen.html Products Getbook getbooks user_id:binary_id book_id:binary_id stripe_cus_id:string stripe_charge_id:string price:float
+mix phx.gen.html Products Getplan getplans user_id:binary_id plan_id:binary_id status:integer stripe_cus_id:string stripe_sub_id:string price:float
 ~~~~~~~~~~
 
 
@@ -203,7 +203,7 @@ Now run -
 mix ecto.setup
 ~~~~~~~~~~
 
-Your database will be ready.
+Your database is ready.
 
 
 ## Step 4. Add AdminbookController and AdminplanController
@@ -228,7 +228,11 @@ resources "/adminplans", PlanController
 
 ## Step 5. Add New Functionality in GetbookController and GetplanController
 
-This block receives stripe payments
+This block receives stripe payments. We have a number of possibilities -
+
+(i)	person buys on a new card,
+(ii)	person buys on an existing card,
+(iii)	person wants to cancel purchase/plan,
 
 ~~~~~~~
     post "/getbooks/new_card", GetbookController, :new_card
@@ -240,15 +244,43 @@ This block receives stripe payments
     post "/getplans/existing_card", GetplanController, :existing_card
 ~~~~~~~
 
+### Stripe Functional Logic
+
+step 1 - create a customer (cus ID) - [stripe customer token for user, last 4]
+step 2 - charge (subscribe to plan)
+
+Procedure -
+
+First time subscription -> store customer token.
+If customer has token, ask whether to use it or change card.
+Otherwise, create a form to get credit card information and use it.
+
+### Pricing Logic
+
+If user is subscribed, check when it ends. Allow access until cancel date.
+If user is not subscribed,  allow two subscriptions.
+
+
+
 
 ## Step 6. Control Access Based on Payment
 
+We allow reading books using a separate function in BookController called 'read'.
 
-create template/page/show.html
+(i) create bookcontroller function read. Remember to include Ecto.Query library.
 
-Also edit route.ex -
+(ii) create template/book/read.html
+
+(iii) Edit route.ex -
 
 ~~~~~~~
-get "/pages/:id/show", PageController, :show
+get "/books/:id/read", BookController, :read
 ~~~~~~~
+
+## Step 7. Show purchases in user panel
+
+
+
+## Step 8. stripe webhooks for plan
+
 

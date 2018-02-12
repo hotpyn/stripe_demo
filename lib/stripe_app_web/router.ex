@@ -64,7 +64,7 @@ defmodule StripeAppWeb.Router do
     post "/getbooks/existing_card", GetbookController, :existing_card
     get "/getbooks/:id/card", GetbookController, :card
 
-    get "/pages/:id/show", PageController, :show
+    get "/books/:id/read", BookController, :read
 
     get "/getplans/:id/card", GetplanController, :card
     post "/getplans/new_card", GetplanController, :new_card

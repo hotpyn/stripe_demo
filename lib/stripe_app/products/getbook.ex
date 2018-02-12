@@ -7,7 +7,7 @@ defmodule StripeApp.Products.Getbook do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "getbooks" do
-    field :book_id, :integer
+    field :book_id, :binary_id
     field :price, :float
     field :stripe_charge_id, :string
     field :stripe_cus_id, :string

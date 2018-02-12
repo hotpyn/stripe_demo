@@ -52,7 +52,17 @@ defmodule StripeAppWeb.GetplanController do
 
   def new_card(conn, %{"plan_id" => id, "amount" => amount, "stripeToken" => token} ) do
     {:ok, %{"id" => stripe_cus_id}} = Stripe.Customer.create(source: token, email: conn.assigns.current_user.email)
-    {:ok, charge} = Stripe.Subscription.create(customer: stripe_cus_id, amount: amount, description: "plan", currency: "usd")
+    {:ok, %{"id" => stripe_sub_id}} = Stripe.Subscription.create(customer: stripe_cus_id, plan: "Tutorial")
+
+    getplan_params=%{stripe_cus_id: stripe_cus_id, stripe_sub_id: stripe_sub_id, user_id: conn.assigns.current_user.id, plan_id: 1, price: amount, status: 1}
+
+    case Products.create_getplan(getplan_params) do
+      {:ok, getplan} ->
+        IO.inspect "SUCCESS"
+      {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect "FAILURE"
+    end
+
     redirect conn, to: user_path(conn, :index)
   end
 
