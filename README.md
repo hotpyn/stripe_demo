@@ -12,6 +12,15 @@ to view all books. Users can also cancel plans.
 
 An user with admin access can add or remove books, raise or lower prices and so on.
 
+Six steps -
+1. Build a coherence project,
+2. Add stripe_cus_id in user model.
+3. Create new scaffolds - books, plans, buybooks and buyplans.
+4. Add - AdminbookController and AdminplanController
+5. Add new function 'read' in BookController with restricted access.
+6. Add Stripe-related access logic in Buybooks and Buyplans.  This sixth step is most critical.
+
+
 
 ## Step 1.  Prepare the project.
 
@@ -49,6 +58,19 @@ It includes the following migrations and corresponding repos.
 20170803154910_create_coherence_rememberable.exs
 ~~~~~~~~~~
 
+Add a field stripe__cus_id to user.
+
+In priv/repo/migrations/20170803154908_create_coherence_user.exs, add -
+
+~~~~~~~~~~
+      add :stripe__cus_id, :string
+~~~~~~~~~~
+
+In lib/stripe_app/coherence/user.ex, add -
+
+~~~~~~~~~~
+    field :stripe_cus_id, :string
+~~~~~~~~~~
 
 ## Step 2. Create Ecto Repos
 
@@ -61,8 +83,8 @@ Create the following four paths using [mix phx.gen.html](https://hexdocs.pm/phoe
 ~~~~~~~~~~
 mix phx.gen.html Products Book books title:string author:string image:string url:string price:float visible:boolean
 mix phx.gen.html Products Plan plans name:string stripe_id:string price:float interval:datetime visible:boolean
-mix phx.gen.html Products Getbook getbooks user_id:binary_id book_id:binary_id stripe_cus_id:string stripe_charge_id:string price:float
-mix phx.gen.html Products Getplan getplans user_id:binary_id plan_id:binary_id status:integer stripe_cus_id:string stripe_sub_id:string price:float
+mix phx.gen.html Products Buybook buybooks user_id:binary_id book_id:binary_id stripe_charge_id:string price:float
+mix phx.gen.html Products Buyplan buyplans user_id:binary_id plan_id:binary_id status:integer stripe_sub_id:string price:float
 ~~~~~~~~~~
 
 
@@ -111,18 +133,17 @@ end
 ~~~~~~~~~~
 
 
-### 3. create_get_books.exs 
+### 3. create_buy_books.exs 
 
 ~~~~~~~~~~
-defmodule StripeApp.Repo.Migrations.CreateGetbooks do
+defmodule StripeApp.Repo.Migrations.CreateBuybooks do
   use Ecto.Migration
 
   def change do
-    create table(:getbooks) do
+    create table(:buybooks) do
       add :user_id, :binary_id
-      add :stripe_cus_id, :string
       add :stripe_charge_id, :string
-      add :book_id, :integer
+      add :book_id, :binary_id
       add :price, :float
 
       timestamps()
@@ -132,18 +153,17 @@ defmodule StripeApp.Repo.Migrations.CreateGetbooks do
 end
 ~~~~~~~~~~
 
-### 4. create_get_plans.exs 
+### 4. create_buy_plans.exs 
 
 ~~~~~~~~~~
-defmodule StripeApp.Repo.Migrations.CreateGetplans do
+defmodule StripeApp.Repo.Migrations.CreateBuyplans do
   use Ecto.Migration
 
   def change do
-    create table(:getplans) do
+    create table(:buyplans) do
       add :user_id, :binary_id
-      add :stripe_cus_id, :string
       add :stripe_sub_id, :string
-      add :plan_id, :integer
+      add :plan_id, :binary_id
       add :status, :integer
       add :price, :float
 
@@ -192,8 +212,8 @@ Also add the following resources under 'pipe_through :protected' -
 ~~~~~~~~~~
 resources "/books", BookController
 resources "/plans", PlanController
-resources "/getbooks", GetbookController
-resources "/getplans", GetplanController
+resources "/buybooks", BuybookController
+resources "/buyplans", BuyplanController
 ~~~~~~~~~~
 
 
@@ -226,23 +246,74 @@ resources "/adminbooks", BookController
 resources "/adminplans", PlanController
 ~~~~~~~~~~
 
-## Step 5. Add New Functionality in GetbookController and GetplanController
+## Step 5. Control Access To Books
 
-This block receives stripe payments. We have a number of possibilities -
+We allow reading books using a separate function in BookController called 'read'. This
+function checks whether the user purchased the book or purchased the plan. If
+purchased, the user is allowed access to 'read.html' to read the book. Otherwise the 
+user is sent to 'show.html'.
 
-(i)	person buys on a new card,
-(ii)	person buys on an existing card,
-(iii)	person wants to cancel purchase/plan,
+(i) create template/book/read.html
 
-~~~~~~~
-    post "/getbooks/new_card", GetbookController, :new_card
-    post "/getbooks/existing_card", GetbookController, :existing_card
-    get "/getbooks/:id/card", GetbookController, :card
+(ii) Edit route.ex to include  -
 
-    get "/getplans/:id/card", GetplanController, :card
-    post "/getplans/new_card", GetplanController, :new_card
-    post "/getplans/existing_card", GetplanController, :existing_card
-~~~~~~~
+~~~~~~~~~
+get "/books/:id/read", BookController, :read
+~~~~~~~~~
+
+(iii) create bookcontroller function read, as shown below.  Note, remember to import 
+Ecto.Query.
+
+~~~~~~~~~
+defmodule StripeAppWeb.BookController do
+  use StripeAppWeb, :controller
+  import Ecto.Query, warn: false
+
+  alias StripeApp.Products
+  alias StripeApp.Products.Book
+
+  def read(conn, %{"id" => id}) do
+
+    result1 = StripeApp.Repo.all (
+         from p in StripeApp.Products.Buybook,
+         where: [book_id: ^id, user_id: ^conn.assigns.current_user.id],
+         select: p)
+
+    result2 = StripeApp.Repo.all (
+         from p in StripeApp.Products.Buyplan,
+         where: [user_id: ^conn.assigns.current_user.id],
+         select: p)
+        IO.inspect result1
+        IO.inspect result2
+
+      case [result1,result2] do
+        [[],[]]->     redirect conn, to: book_path(conn, :show, id)
+        _ ->
+                book = StripeApp.Products.get_book!(id)
+                render(conn, "read.html", book: book)
+      end
+  end
+
+end
+~~~~~~~~~
+
+The function checks Buybook and Buyplan repos. If the user purchased book or
+plan, he is allowed to access. At present, no user will be allowed to access anything.
+
+
+## Step 6. Add New Functionality in BuybookController and BuyplanController
+
+Next let us update Buybook and Buyplan based on Stripe payment. This is where
+the core of our logic lies.  We will first implement the basic functionality,
+and then improve the code to account for the following possibilities -
+
+(i)	if the user buys on a new card, create a new Stripe customer account.
+(ii)	If the user buys on an existing card, use the same Stripe customer account.
+(iii)	Allow user to also cancel purchase/plan.
+(iv)	Show purchases in user panel.
+(v)	Take care of stripe webhooks to show renewal invoices.
+
+Here is how Stripe functional logic works.
 
 ### Stripe Functional Logic
 
@@ -261,26 +332,24 @@ If user is subscribed, check when it ends. Allow access until cancel date.
 If user is not subscribed,  allow two subscriptions.
 
 
-
-
-## Step 6. Control Access Based on Payment
-
-We allow reading books using a separate function in BookController called 'read'.
-
-(i) create bookcontroller function read. Remember to include Ecto.Query library.
-
-(ii) create template/book/read.html
-
-(iii) Edit route.ex -
-
 ~~~~~~~
-get "/books/:id/read", BookController, :read
+    post "/buybooks/new_card", BuybookController, :new_card
+    post "/buybooks/existing_card", BuybookController, :existing_card
+    get "/buybooks/:id/new", BuybookController, :new
+
+    get "/buyplans/:id/new", BuyplanController, :new
+    post "/buyplans/new_card", BuyplanController, :new_card
+    post "/buyplans/existing_card", BuyplanController, :existing_card
 ~~~~~~~
 
-## Step 7. Show purchases in user panel
 
 
+## References
 
-## Step 8. stripe webhooks for plan
+1.  https://github.com/sikanhe/stripe-elixir
+2.  http://www.jaredrader.com/blog/2013/12/18/a-stripe-integration
+3.  https://mikesabat.wordpress.com/2013/12/15/making-users-pay-building-a-site-with-strip-and-devise/
+4.  https://www.youtube.com/watch?v=hyEsiwc0ys4
+5.  http://stackoverflow.com/questions/9628359/using-stripe-with-devise
 
 

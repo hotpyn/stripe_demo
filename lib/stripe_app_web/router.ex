@@ -60,15 +60,17 @@ defmodule StripeAppWeb.Router do
     put "/unlock/:id", UserController, :unlock
     put "/confirm/:id", UserController, :confirm
 
-    post "/getbooks/new_card", GetbookController, :new_card
-    post "/getbooks/existing_card", GetbookController, :existing_card
-    get "/getbooks/:id/card", GetbookController, :card
+    post "/buybooks/new_card", BuybookController, :new_card
+    post "/buybooks/existing_card", BuybookController, :existing_card
+    get "/buybooks/:id/new", BuybookController, :new
 
     get "/books/:id/read", BookController, :read
 
-    get "/getplans/:id/card", GetplanController, :card
-    post "/getplans/new_card", GetplanController, :new_card
-    post "/getplans/existing_card", GetplanController, :existing_card
+    get "/buyplans/:id/new", BuyplanController, :new
+    get "/buyplans/:id/cancel", BuyplanController, :cancel
+    get "/buyplans/cancel_sure", BuyplanController, :cancel_sure
+    post "/buyplans/new_card", BuyplanController, :new_card
+    post "/buyplans/existing_card", BuyplanController, :existing_card
 
   end
 

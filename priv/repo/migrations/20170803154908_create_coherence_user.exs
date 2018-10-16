@@ -6,6 +6,8 @@ defmodule StripeApp.Repo.Migrations.CreateCoherenceUser do
 
       add :name, :string
       add :email, :string
+      add :stripe_cus_id, :string
+
       # rememberable
       add :remember_created_at, :utc_datetime
       # unlockable_with_token

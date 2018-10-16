@@ -11,6 +11,7 @@ defmodule StripeApp.Coherence.User do
   schema "users" do
     field :name, :string
     field :email, :string
+    field :stripe_cus_id, :string
     coherence_schema()
 
     timestamps()

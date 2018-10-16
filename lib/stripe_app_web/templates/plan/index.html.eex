@@ -20,7 +20,8 @@
 
       <td class="text-right">
         <span><%= link "Show", to: plan_path(@conn, :show, plan), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Buy", to: getplan_path(@conn, :card, plan), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Buy", to: buyplan_path(@conn, :new, plan), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Cancel", to: buyplan_path(@conn, :cancel, plan), class: "btn btn-default btn-xs" %></span>
       </td>
     </tr>
   <% end %>

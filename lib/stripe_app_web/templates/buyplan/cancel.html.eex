@@ -1,0 +1,5 @@
+<h4>You requested about canceling your subscription plan. Are you sure?</h4>
+
+<span><%= link "Yes", to: buyplan_path(@conn, :cancel_sure, %{"id" => @id}), class: "btn btn-default btn-xs" %></span><P><P>
+<span><%= link "No", to: book_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
+

@@ -1,14 +1,13 @@
-defmodule StripeApp.Repo.Migrations.CreateGetplans do
+defmodule StripeApp.Repo.Migrations.CreateBuyplans do
   use Ecto.Migration
 
   def change do
-    create table(:getplans, primary_key: false) do
+    create table(:buyplans, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :user_id, :binary_id
-      add :plan_id, :integer
+      add :plan_id, :binary_id
       add :status, :integer
       add :stripe_sub_id, :string
-      add :stripe_cus_id, :string
       add :price, :float
 
       timestamps()

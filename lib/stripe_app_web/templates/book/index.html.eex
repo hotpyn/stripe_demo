@@ -25,7 +25,7 @@
       <td class="text-right">
         <span><%= link "Show", to: book_path(@conn, :show, book), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Read", to: book_path(@conn, :read, book), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Buy", to: getbook_path(@conn, :card, book), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Buy", to: buybook_path(@conn, :new, book), class: "btn btn-default btn-xs" %></span>
       </td>
     </tr>
   <% end %>

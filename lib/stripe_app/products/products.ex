@@ -198,195 +198,195 @@ defmodule StripeApp.Products do
     Plan.changeset(plan, %{})
   end
 
-  alias StripeApp.Products.Getbook
+  alias StripeApp.Products.Buybook
 
   @doc """
-  Returns the list of getbooks.
+  Returns the list of buybooks.
 
   ## Examples
 
-      iex> list_getbooks()
-      [%Getbook{}, ...]
+      iex> list_buybooks()
+      [%Buybook{}, ...]
 
   """
-  def list_getbooks do
-    Repo.all(Getbook)
+  def list_buybooks do
+    Repo.all(Buybook)
   end
 
   @doc """
-  Gets a single getbook.
+  Gets a single buybook.
 
-  Raises `Ecto.NoResultsError` if the Getbook does not exist.
+  Raises `Ecto.NoResultsError` if the Buybook does not exist.
 
   ## Examples
 
-      iex> get_getbook!(123)
-      %Getbook{}
+      iex> get_buybook!(123)
+      %Buybook{}
 
-      iex> get_getbook!(456)
+      iex> get_buybook!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_getbook!(id), do: Repo.get!(Getbook, id)
+  def get_buybook!(id), do: Repo.get!(Buybook, id)
 
   @doc """
-  Creates a getbook.
+  Creates a buybook.
 
   ## Examples
 
-      iex> create_getbook(%{field: value})
-      {:ok, %Getbook{}}
+      iex> create_buybook(%{field: value})
+      {:ok, %Buybook{}}
 
-      iex> create_getbook(%{field: bad_value})
+      iex> create_buybook(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_getbook(attrs \\ %{}) do
-    %Getbook{}
-    |> Getbook.changeset(attrs)
+  def create_buybook(attrs \\ %{}) do
+    %Buybook{}
+    |> Buybook.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a getbook.
+  Updates a buybook.
 
   ## Examples
 
-      iex> update_getbook(getbook, %{field: new_value})
-      {:ok, %Getbook{}}
+      iex> update_buybook(buybook, %{field: new_value})
+      {:ok, %Buybook{}}
 
-      iex> update_getbook(getbook, %{field: bad_value})
+      iex> update_buybook(buybook, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_getbook(%Getbook{} = getbook, attrs) do
-    getbook
-    |> Getbook.changeset(attrs)
+  def update_buybook(%Buybook{} = buybook, attrs) do
+    buybook
+    |> Buybook.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a Getbook.
+  Deletes a Buybook.
 
   ## Examples
 
-      iex> delete_getbook(getbook)
-      {:ok, %Getbook{}}
+      iex> delete_buybook(buybook)
+      {:ok, %Buybook{}}
 
-      iex> delete_getbook(getbook)
+      iex> delete_buybook(buybook)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_getbook(%Getbook{} = getbook) do
-    Repo.delete(getbook)
+  def delete_buybook(%Buybook{} = buybook) do
+    Repo.delete(buybook)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking getbook changes.
+  Returns an `%Ecto.Changeset{}` for tracking buybook changes.
 
   ## Examples
 
-      iex> change_getbook(getbook)
-      %Ecto.Changeset{source: %Getbook{}}
+      iex> change_buybook(buybook)
+      %Ecto.Changeset{source: %Buybook{}}
 
   """
-  def change_getbook(%Getbook{} = getbook) do
-    Getbook.changeset(getbook, %{})
+  def change_buybook(%Buybook{} = buybook) do
+    Buybook.changeset(buybook, %{})
   end
 
-  alias StripeApp.Products.Getplan
+  alias StripeApp.Products.Buyplan
 
   @doc """
-  Returns the list of getplans.
+  Returns the list of buyplans.
 
   ## Examples
 
-      iex> list_getplans()
-      [%Getplan{}, ...]
+      iex> list_buyplans()
+      [%Buyplan{}, ...]
 
   """
-  def list_getplans do
-    Repo.all(Getplan)
+  def list_buyplans do
+    Repo.all(Buyplan)
   end
 
   @doc """
-  Gets a single getplan.
+  Gets a single buyplan.
 
-  Raises `Ecto.NoResultsError` if the Getplan does not exist.
+  Raises `Ecto.NoResultsError` if the Buyplan does not exist.
 
   ## Examples
 
-      iex> get_getplan!(123)
-      %Getplan{}
+      iex> get_buyplan!(123)
+      %Buyplan{}
 
-      iex> get_getplan!(456)
+      iex> get_buyplan!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_getplan!(id), do: Repo.get!(Getplan, id)
+  def get_buyplan!(id), do: Repo.get!(Buyplan, id)
 
   @doc """
-  Creates a getplan.
+  Creates a buyplan.
 
   ## Examples
 
-      iex> create_getplan(%{field: value})
-      {:ok, %Getplan{}}
+      iex> create_buyplan(%{field: value})
+      {:ok, %Buyplan{}}
 
-      iex> create_getplan(%{field: bad_value})
+      iex> create_buyplan(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_getplan(attrs \\ %{}) do
-    %Getplan{}
-    |> Getplan.changeset(attrs)
+  def create_buyplan(attrs \\ %{}) do
+    %Buyplan{}
+    |> Buyplan.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a getplan.
+  Updates a buyplan.
 
   ## Examples
 
-      iex> update_getplan(getplan, %{field: new_value})
-      {:ok, %Getplan{}}
+      iex> update_buyplan(buyplan, %{field: new_value})
+      {:ok, %Buyplan{}}
 
-      iex> update_getplan(getplan, %{field: bad_value})
+      iex> update_buyplan(buyplan, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_getplan(%Getplan{} = getplan, attrs) do
-    getplan
-    |> Getplan.changeset(attrs)
+  def update_buyplan(%Buyplan{} = buyplan, attrs) do
+    buyplan
+    |> Buyplan.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a Getplan.
+  Deletes a Buyplan.
 
   ## Examples
 
-      iex> delete_getplan(getplan)
-      {:ok, %Getplan{}}
+      iex> delete_buyplan(buyplan)
+      {:ok, %Buyplan{}}
 
-      iex> delete_getplan(getplan)
+      iex> delete_buyplan(buyplan)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_getplan(%Getplan{} = getplan) do
-    Repo.delete(getplan)
+  def delete_buyplan(%Buyplan{} = buyplan) do
+    Repo.delete(buyplan)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking getplan changes.
+  Returns an `%Ecto.Changeset{}` for tracking buyplan changes.
 
   ## Examples
 
-      iex> change_getplan(getplan)
-      %Ecto.Changeset{source: %Getplan{}}
+      iex> change_buyplan(buyplan)
+      %Ecto.Changeset{source: %Buyplan{}}
 
   """
-  def change_getplan(%Getplan{} = getplan) do
-    Getplan.changeset(getplan, %{})
+  def change_buyplan(%Buyplan{} = buyplan) do
+    Buyplan.changeset(buyplan, %{})
   end
 end
